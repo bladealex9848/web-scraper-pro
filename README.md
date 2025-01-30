@@ -91,13 +91,30 @@ scraper.descargar_pagina()
 
 ```plaintext
 web-scraper-pro/
-├── app.py                 # Aplicación principal Streamlit
-├── webscraper/           # Módulo core de la aplicación
-│   ├── __init__.py
-│   └── scraper.py        # Lógica principal de scraping
-├── requirements.txt      # Dependencias del proyecto
-├── LICENSE              # Licencia MIT
-└── README.md            # Esta documentación
+├── app.py                  # Aplicación principal Streamlit
+├── webscraper/             # Módulo core de la aplicación
+│   ├── __init__.py         # Inicialización del módulo
+│   └── scraper.py          # Clase WebScraper
+│   └── config.py           # Configuración de la aplicación
+│   └── utils.py            # Utilidades y funciones auxiliares
+│   └── exceptions.py       # Excepciones personalizadas
+├── temp                    # Directorio temporal
+├── logs/                   # Directorio para logs
+└── temp_download/          # Directorio temporal para descargas  
+├── tests/                  # Pruebas unitarias
+│   └── test_scraper.py     # Pruebas para la clase WebScraper
+├── static/                 # Pruebas unitarias
+│   └── style.css           # Archivo CSS para la aplicación
+├── docs/                   # Documentación del proyecto
+│   └── API.md              # Documentación de la API
+│   └── DEVELOPMENT.md      # Guía de desarrollo
+├── requirements.txt        # Dependencias del proyecto
+├── LICENSE                 # Licencia MIT
+└── README.md               # Esta documentación
+└── CHANGELOG.md            # Registro de cambios
+└── .gitignore              # Archivos y directorios ignorados por Git
+└── .streamlit/             # Configuración de Streamlit
+    └── config.toml         # Configuración de Streamlit
 ```
 
 ## 🔒 Seguridad
