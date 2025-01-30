@@ -1,0 +1,49 @@
+/* Estilos personalizados para la aplicación */
+.stApp {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.stProgress > div > div {
+    background-color: #00acee;
+}
+
+/* Estilos para los botones */
+.stButton > button {
+    width: 100%;
+    border-radius: 5px;
+    padding: 0.5rem 1rem;
+    margin-top: 1rem;
+}
+
+/* Estilos para las métricas */
+.stMetric {
+    background-color: #f8f9fa;
+    padding: 1rem;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Estilos para las alertas */
+.stAlert {
+    padding: 1rem;
+    border-radius: 5px;
+    margin: 1rem 0;
+}
+
+/* Personalización de la barra lateral */
+.sidebar .sidebar-content {
+    background-color: #f8f9fa;
+}
+
+/* Mejoras de legibilidad */
+.stMarkdown {
+    line-height: 1.6;
+}
+
+/* Responsividad */
+@media (max-width: 768px) {
+    .stApp {
+        padding: 1rem;
+    }
+}
