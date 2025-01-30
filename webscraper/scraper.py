@@ -1,161 +1,270 @@
+"""
+Módulo principal del Web Scraper Pro con soporte para descarga recursiva multinivel.
+"""
+
 import requests
 from bs4 import BeautifulSoup
 import os
 import urllib.parse
-from urllib.parse import urljoin, urlparse
+from pathlib import Path
+import threading
 import logging
+from urllib.parse import urljoin, urlparse
+import concurrent.futures
 import time
-from concurrent.futures import ThreadPoolExecutor, as_completed
+from typing import Optional, Dict, Set, List
+import hashlib
+from dataclasses import dataclass, field
+from queue import Queue
+import re
+
+# Configuración de logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+@dataclass
+class PageContext:
+    """Contexto de una página para descarga recursiva."""
+    url: str
+    nivel: int
+    ruta_destino: Path
+    urls_procesadas: Set[str] = field(default_factory=set)
 
 class WebScraper:
-    def __init__(self, base_url, carpeta_destino, **kwargs):
+    """Clase principal para el scraping de sitios web con soporte multinivel."""
+    
+    def __init__(self, base_url: str, carpeta_destino: str, **kwargs):
         self.base_url = base_url
         self.domain = urlparse(base_url).netloc
-        self.carpeta_destino = carpeta_destino
-        self.session = requests.Session()
+        self.carpeta_destino = Path(carpeta_destino)
+        self.session = self._configurar_session()
         self.archivos_descargados = set()
-        self.total_archivos = 0
-        self.tamano_total = 0
-        self.tiempo_total = 0
+        self.urls_procesadas = set()
+        self.lock = threading.Lock()
         
-        # Configuraciones
-        self.mantener_estructura = kwargs.get('mantener_estructura', True)
-        self.incluir_imagenes = kwargs.get('incluir_imagenes', True)
-        self.incluir_css = kwargs.get('incluir_css', True)
-        self.incluir_js = kwargs.get('incluir_js', True)
+        # Estadísticas
+        self.estadisticas = {
+            'inicio': time.time(),
+            'archivos_procesados': 0,
+            'bytes_descargados': 0,
+            'errores': 0,
+            'tiempo_total': 0
+        }
         
-        # Headers para simular un navegador
-        self.session.headers.update({
-            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.114 Safari/537.36'
-        })
+        # Configuración
+        self.config = {
+            'mantener_estructura': kwargs.get('mantener_estructura', True),
+            'incluir_imagenes': kwargs.get('incluir_imagenes', True),
+            'incluir_css': kwargs.get('incluir_css', True),
+            'incluir_js': kwargs.get('incluir_js', True),
+            'max_profundidad': kwargs.get('max_profundidad', 1),
+            'timeout': kwargs.get('timeout', 30)
+        }
+        
+        # Cola de procesamiento para URLs
+        self.cola_urls = Queue()
 
-    def obtener_ruta_relativa(self, url):
-        """Convierte una URL en una ruta de archivo relativa"""
+    def _configurar_session(self) -> requests.Session:
+        """Configura la sesión HTTP con opciones optimizadas."""
+        session = requests.Session()
+        session.headers.update({
+            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36'
+        })
+        return session
+
+    def es_url_interna(self, url: str) -> bool:
+        """Verifica si una URL pertenece al mismo dominio."""
+        try:
+            parsed = urlparse(url)
+            return parsed.netloc == self.domain or not parsed.netloc
+        except Exception:
+            return False
+
+    def obtener_ruta_relativa(self, url: str, nivel: int = 0) -> Optional[str]:
+        """Convierte una URL en una ruta de archivo relativa."""
         if not url:
             return None
-        
+            
         try:
-            # Manejar URLs relativas
             url_completa = urljoin(self.base_url, url)
             parsed = urlparse(url_completa)
             
-            # Solo procesar recursos del mismo dominio
             if parsed.netloc and parsed.netloc != self.domain:
                 return None
                 
+            # Limpiar y procesar la ruta
             path = parsed.path
             if not path or path == '/':
                 path = 'index.html'
             elif path.endswith('/'):
                 path += 'index.html'
+            elif not any(path.lower().endswith(ext) for ext in ['.html', '.htm', '.php', '.asp', '.aspx']):
+                path = os.path.join(path, 'index.html')
             
-            # Limpiar la ruta
-            return path.lstrip('/')
+            # Sanitizar el nombre del archivo
+            path = re.sub(r'[<>:"/\\|?*]', '_', path.lstrip('/'))
+            
+            if nivel > 0:
+                # Crear estructura de directorios para niveles
+                partes = path.split('/')
+                if len(partes) > 1:
+                    path = os.path.join(f"nivel_{nivel}", *partes)
+                else:
+                    path = os.path.join(f"nivel_{nivel}", path)
+            
+            return path
+            
         except Exception as e:
-            logging.error(f"Error procesando URL {url}: {str(e)}")
+            logger.error(f"Error procesando URL {url}: {str(e)}")
             return None
 
-    def descargar_recurso(self, url, ruta_destino):
-        """Descarga un recurso y lo guarda en la ruta especificada"""
+    def descargar_recurso(self, url: str, nivel: int = 0) -> Optional[str]:
+        """Descarga un recurso y lo guarda en el sistema de archivos."""
         if not url or url in self.archivos_descargados:
             return None
             
         try:
-            response = self.session.get(urljoin(self.base_url, url), stream=True)
-            response.raise_for_status()
+            ruta_relativa = self.obtener_ruta_relativa(url, nivel)
+            if not ruta_relativa:
+                return None
+                
+            ruta_completa = self.carpeta_destino / ruta_relativa
             
             # Crear directorio si no existe
-            os.makedirs(os.path.dirname(ruta_destino), exist_ok=True)
+            ruta_completa.parent.mkdir(parents=True, exist_ok=True)
             
-            # Guardar archivo
-            tamano = 0
-            with open(ruta_destino, 'wb') as f:
+            # Descargar el recurso
+            response = self.session.get(
+                urljoin(self.base_url, url),
+                stream=True,
+                timeout=self.config['timeout']
+            )
+            response.raise_for_status()
+            
+            with open(ruta_completa, 'wb') as f:
                 for chunk in response.iter_content(chunk_size=8192):
                     if chunk:
-                        tamano += len(chunk)
                         f.write(chunk)
+                        with self.lock:
+                            self.estadisticas['bytes_descargados'] += len(chunk)
             
-            self.archivos_descargados.add(url)
-            self.total_archivos += 1
-            self.tamano_total += tamano / (1024 * 1024)  # Convertir a MB
+            with self.lock:
+                self.archivos_descargados.add(url)
+                self.estadisticas['archivos_procesados'] += 1
             
-            return True
+            return ruta_relativa
+            
         except Exception as e:
-            logging.error(f"Error descargando {url}: {str(e)}")
-            return False
+            logger.error(f"Error al descargar {url}: {str(e)}")
+            with self.lock:
+                self.estadisticas['errores'] += 1
+            return None
 
-    def descargar_pagina(self, progress_bar=None, status_text=None):
-        """Descarga una página web completa y sus recursos"""
-        tiempo_inicio = time.time()
-        
+    def procesar_enlaces(self, soup: BeautifulSoup, nivel_actual: int) -> List[str]:
+        """Procesa y extrae enlaces válidos de una página."""
+        enlaces = []
+        if nivel_actual >= self.config['max_profundidad']:
+            return enlaces
+
+        for a in soup.find_all('a', href=True):
+            href = a['href']
+            url_completa = urljoin(self.base_url, href)
+            
+            if (self.es_url_interna(url_completa) and 
+                url_completa not in self.urls_procesadas):
+                enlaces.append(url_completa)
+                
+        return enlaces
+
+    def procesar_pagina(self, url: str, nivel: int) -> None:
+        """Procesa una página y sus recursos."""
+        if url in self.urls_procesadas:
+            return
+
         try:
-            # Descargar página principal
-            response = self.session.get(self.base_url)
+            with self.lock:
+                self.urls_procesadas.add(url)
+
+            response = self.session.get(url, timeout=self.config['timeout'])
             response.raise_for_status()
             soup = BeautifulSoup(response.content, 'html.parser')
 
-            # Definir elementos a procesar según configuración
-            elementos_a_procesar = {}
-            if self.incluir_imagenes:
-                elementos_a_procesar.update({
-                    'img': ['src', 'data-src'],
-                    'source': ['src', 'srcset'],
-                })
-            if self.incluir_css:
-                elementos_a_procesar['link'] = ['href']
-            if self.incluir_js:
-                elementos_a_procesar['script'] = ['src']
+            # Procesar recursos según configuración
+            if self.config['incluir_imagenes']:
+                for img in soup.find_all('img', src=True):
+                    self.descargar_recurso(img['src'], nivel)
 
-            # Contar total de elementos
-            total_elementos = sum(
-                len(soup.find_all(tag)) 
-                for tag in elementos_a_procesar
-            )
-            elementos_procesados = 0
+            if self.config['incluir_css']:
+                for css in soup.find_all('link', rel='stylesheet'):
+                    if css.get('href'):
+                        self.descargar_recurso(css['href'], nivel)
 
-            # Procesar elementos
-            with ThreadPoolExecutor(max_workers=5) as executor:
+            if self.config['incluir_js']:
+                for js in soup.find_all('script', src=True):
+                    self.descargar_recurso(js['src'], nivel)
+
+            # Guardar la página actual
+            ruta_relativa = self.obtener_ruta_relativa(url, nivel)
+            if ruta_relativa:
+                ruta_completa = self.carpeta_destino / ruta_relativa
+                ruta_completa.parent.mkdir(parents=True, exist_ok=True)
+                with open(ruta_completa, 'w', encoding='utf-8') as f:
+                    f.write(str(soup.prettify()))
+
+            # Procesar enlaces para el siguiente nivel
+            if nivel < self.config['max_profundidad']:
+                enlaces = self.procesar_enlaces(soup, nivel)
+                for enlace in enlaces:
+                    if enlace not in self.urls_procesadas:
+                        self.cola_urls.put((enlace, nivel + 1))
+
+        except Exception as e:
+            logger.error(f"Error procesando página {url}: {str(e)}")
+            with self.lock:
+                self.estadisticas['errores'] += 1
+
+    def descargar_pagina(self, progress_bar=None, status_text=None) -> bool:
+        """Inicia el proceso de descarga recursiva del sitio web."""
+        try:
+            self.cola_urls.put((self.base_url, 0))
+            total_procesado = 0
+
+            with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
                 futures = []
                 
-                for tag, atributos in elementos_a_procesar.items():
-                    for elemento in soup.find_all(tag):
-                        for attr in atributos:
-                            if elemento.has_attr(attr):
-                                url = elemento[attr]
-                                ruta_relativa = self.obtener_ruta_relativa(url)
-                                
-                                if ruta_relativa:
-                                    ruta_completa = os.path.join(
-                                        self.carpeta_destino, 
-                                        ruta_relativa
-                                    )
-                                    futures.append(
-                                        executor.submit(
-                                            self.descargar_recurso, 
-                                            url, 
-                                            ruta_completa
-                                        )
-                                    )
-                                    elemento[attr] = ruta_relativa
-
-                # Esperar completación y actualizar progreso
-                for future in as_completed(futures):
-                    elementos_procesados += 1
-                    if progress_bar:
-                        progress_bar.progress(elementos_procesados / total_elementos)
-                    if status_text:
-                        status_text.text(
-                            f"Procesando: {elementos_procesados}/{total_elementos} elementos"
+                while not self.cola_urls.empty():
+                    url, nivel = self.cola_urls.get()
+                    if url not in self.urls_procesadas:
+                        futures.append(
+                            executor.submit(self.procesar_pagina, url, nivel)
                         )
+                        
+                        if status_text:
+                            status_text.text(f"Procesando nivel {nivel}: {url}")
 
-            # Guardar HTML final
-            ruta_index = os.path.join(self.carpeta_destino, 'index.html')
-            with open(ruta_index, 'w', encoding='utf-8') as f:
-                f.write(str(soup.prettify()))
+                    total_procesado += 1
+                    if progress_bar:
+                        progress_bar.progress(min(total_procesado / (total_procesado + self.cola_urls.qsize()), 1.0))
 
-            self.tiempo_total = time.time() - tiempo_inicio
+                concurrent.futures.wait(futures)
+
+            self.estadisticas['tiempo_total'] = time.time() - self.estadisticas['inicio']
             return True
 
         except Exception as e:
-            logging.error(f"Error al descargar la página: {str(e)}")
+            logger.error(f"Error en la descarga: {str(e)}")
             return False
+
+    def obtener_estadisticas(self) -> Dict:
+        """Retorna las estadísticas de la descarga."""
+        return {
+            'archivos_procesados': self.estadisticas['archivos_procesados'],
+            'bytes_descargados': self.estadisticas['bytes_descargados'],
+            'errores': self.estadisticas['errores'],
+            'tiempo_total': self.estadisticas['tiempo_total'],
+            'paginas_procesadas': len(self.urls_procesadas),
+            'velocidad_promedio': (
+                self.estadisticas['bytes_descargados'] / 
+                max(self.estadisticas['tiempo_total'], 0.001)
+            )
+        }

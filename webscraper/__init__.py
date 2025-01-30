@@ -1,100 +1,85 @@
 """
-Web Scraper Pro - Módulo principal para descarga y procesamiento de sitios web.
-
-Este módulo proporciona funcionalidades para la descarga completa de sitios web,
-incluyendo recursos estáticos y manteniendo la estructura original del sitio.
+Web Scraper Pro - Módulo principal
 """
 
 import logging
 from pathlib import Path
+import os
+import sys
 from typing import Dict, Any
-from .config import VERSION, LogConfig, ENV
-from .exceptions import WebScraperError
-from .scraper import WebScraper
+import platform
+
+# Configuración de versión
+VERSION = "1.0.0"
+
+# Configuración de rutas base
+BASE_DIR = Path(__file__).parent.parent
+TEMP_DIR = BASE_DIR / "temp_download"
+LOGS_DIR = BASE_DIR / "logs"
+
+# Asegurar que los directorios existan
+TEMP_DIR.mkdir(exist_ok=True)
+LOGS_DIR.mkdir(exist_ok=True)
 
 # Configuración del logging
 def setup_logging() -> None:
-    """Configura el sistema de logging con los parámetros definidos."""
-    logging.basicConfig(
-        level=getattr(logging, LogConfig.LEVEL),
-        format=LogConfig.FORMAT,
-        datefmt=LogConfig.DATE_FORMAT,
-        handlers=[
-            logging.FileHandler(LogConfig.LOG_FILE),
-            logging.StreamHandler()
-        ]
-    )
+    """Configura el sistema de logging."""
+    try:
+        logging.basicConfig(
+            level=logging.INFO,
+            format='%(asctime)s - %(levelname)s - %(message)s',
+            handlers=[
+                logging.FileHandler(LOGS_DIR / "webscraper.log"),
+                logging.StreamHandler()
+            ]
+        )
+    except Exception as e:
+        print(f"Error configurando logging: {str(e)}")
+        # Configuración fallback
+        logging.basicConfig(
+            level=logging.INFO,
+            format='%(asctime)s - %(levelname)s - %(message)s'
+        )
 
-    # Configurar logger de errores
-    error_handler = logging.FileHandler(LogConfig.ERROR_LOG)
-    error_handler.setLevel(logging.ERROR)
-    error_handler.setFormatter(logging.Formatter(LogConfig.FORMAT))
-    
-    # Agregar handler al logger raíz
-    logging.getLogger('').addHandler(error_handler)
-
-# Inicialización del módulo
+# Inicialización del logger
 setup_logging()
 logger = logging.getLogger(__name__)
 
-logger.info(f"Iniciando Web Scraper Pro v{VERSION} en modo {ENV}")
+# Log de inicio
+logger.info(f"Iniciando Web Scraper Pro v{VERSION}")
 
-# Validación del entorno
-def validate_environment() -> Dict[str, Any]:
+# Validación simple del entorno
+def get_environment_info() -> Dict[str, Any]:
     """
-    Valida el entorno de ejecución y retorna la configuración del sistema.
+    Recopila información básica del entorno.
     
     Returns:
-        Dict[str, Any]: Diccionario con la configuración del entorno
-    
-    Raises:
-        WebScraperError: Si hay problemas con la configuración del entorno
+        Dict[str, Any]: Diccionario con información del entorno
     """
-    try:
-        env_config = {
-            'version': VERSION,
-            'environment': ENV,
-            'python_version': platform.python_version(),
-            'system': platform.system(),
-            'encoding': sys.getfilesystemencoding()
-        }
-        
-        # Verificar permisos de directorios
-        paths_to_check = [
-            LogConfig.LOG_FILE.parent,
-            LogConfig.ERROR_LOG.parent
-        ]
-        
-        for path in paths_to_check:
-            if not os.access(path, os.W_OK):
-                raise WebScraperError(f"Sin permisos de escritura en {path}")
-        
-        return env_config
-        
-    except Exception as e:
-        logger.critical(f"Error en la validación del entorno: {str(e)}")
-        raise WebScraperError(f"Error de inicialización: {str(e)}")
+    return {
+        'version': VERSION,
+        'python_version': platform.python_version(),
+        'system': platform.system(),
+        'machine': platform.machine(),
+        'encoding': sys.getfilesystemencoding(),
+        'temp_dir': str(TEMP_DIR),
+        'logs_dir': str(LOGS_DIR)
+    }
 
-# Exportar clases y funciones principales
-__all__ = [
-    'WebScraper',
-    'WebScraperError',
-    'VERSION',
-    'setup_logging',
-    'validate_environment'
-]
+# Exportar elementos principales
+from .scraper import WebScraper
 
-# Metadatos del paquete
+__all__ = ['WebScraper', 'VERSION', 'get_environment_info']
+
+# Metadata del paquete
 __version__ = VERSION
 __author__ = "Alexander Oviedo Fadul"
 __email__ = "info@alexanderoviedofadul.dev"
 __license__ = "MIT"
-__description__ = "Herramienta profesional para la descarga y procesamiento de sitios web completos"
 
-# Validación inicial del entorno
+# Registro de información del entorno
 try:
-    env_info = validate_environment()
-    logger.info(f"Configuración del entorno: {env_info}")
-except WebScraperError as e:
-    logger.critical(f"Error crítico durante la inicialización: {str(e)}")
-    raise
+    env_info = get_environment_info()
+    logger.info(f"Información del entorno: {env_info}")
+except Exception as e:
+    logger.warning(f"No se pudo obtener información completa del entorno: {str(e)}")

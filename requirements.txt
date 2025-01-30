@@ -11,19 +11,14 @@ aiohttp>=3.9.1
 httpx>=0.25.2
 
 # File and Path Management
-pathlib>=1.0.1
 python-magic>=0.4.27
-python-magic-bin>=0.4.14; platform_system == "Windows"
 filetype>=1.2.0
 
 # Concurrency and Performance
-asyncio>=3.4.3
 aiofiles>=23.2.1
-concurrent-futures>=3.0.5
 
 # Logging and Monitoring
-python-logging-json>=0.2.0
-concurrent-log-handler>=0.9.24
+python-json-logger>=2.0.7
 loguru>=0.7.2
 
 # Data Processing
@@ -34,7 +29,6 @@ tqdm>=4.66.1
 # Security
 cryptography>=41.0.7
 validators>=0.22.0
-safety>=2.3.5
 
 # Utils
 python-dotenv>=1.0.0
@@ -44,4 +38,3 @@ typing-extensions>=4.8.0
 
 # Compression and Archives
 py7zr>=0.20.6
-zipfile38>=0.0.3

@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>
+   HMS Training Portal
+  </title>
+  <script src="https://cdn.tailwindcss.com">
+  </script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet"/>
+  <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-YFJ1NDGMDE">
+  </script>
+  <script>
+   window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+    
+      gtag('config', 'G-YFJ1NDGMDE');
+  </script>
+  <!-- Google tag (gtag.js) -->
+  <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-YFJ1NDGMDE">
+  </script>
+  <script>
+   window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-YFJ1NDGMDE');
+  </script>
+ </head>
+ <body class="bg-gray-50">
+  <div class="min-h-screen">
+   <!-- Header -->
+   <header class="bg-white shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+     <div class="flex flex-col sm:flex-row items-center justify-between space-y-4 sm:space-y-0">
+      <div class="flex items-center">
+       <img alt="HMS Logo" class="h-10 sm:h-12" src="https://cdn-icons-png.flaticon.com/512/4006/4006511.png"/>
+       <h1 class="ml-4 text-xl sm:text-2xl font-bold text-gray-900">
+        HMS Training Portal
+       </h1>
+      </div>
+      <div class="flex items-center space-x-3">
+       <a class="inline-flex items-center px-3 py-1 border border-blue-600 text-blue-600 hover:bg-blue-50 rounded-md text-sm" href="https://codearistos.net/demo/multi-hms/auth" target="_blank">
+        <i class="fas fa-external-link-alt mr-2">
+        </i>
+        <span class="hidden sm:inline">
+         Live Preview
+        </span>
+        <span class="sm:hidden">
+         Live Preview
+        </span>
+       </a>
+       <a class="inline-flex items-center px-3 py-1 border border-blue-600 text-blue-600 hover:bg-blue-50 rounded-md text-sm" href="demo.html">
+        Home
+       </a>
+      </div>
+     </div>
+    </div>
+   </header>
+   <!-- Hero Section -->
+   <div class="bg-blue-600 text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+     <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+      <div>
+       <h2 class="text-3xl font-bold mb-4">
+        Welcome to HMS Training
+       </h2>
+       <p class="text-blue-100 mb-6">
+        Access comprehensive training modules for all hospital roles. Learn at your own pace with our interactive guides and tutorials.
+       </p>
+       <div class="flex space-x-4">
+        <a class="bg-white text-blue-600 px-6 py-2 rounded-lg font-medium hover:bg-blue-50 transition" href="#portals">
+         Get Started
+        </a>
+        <a class="border border-white text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-700 transition" href="#help">
+         Need Help?
+        </a>
+       </div>
+      </div>
+      <div class="hidden md:block">
+       <img alt="Training Illustration" class="w-96 mx-auto" src="https://cdn-icons-png.flaticon.com/512/3798/3798176.png"/>
+      </div>
+     </div>
+    </div>
+   </div>
+   <!-- Main Content -->
+   <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Training Stats -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
+     <div class="bg-white rounded-lg shadow-sm p-6 text-center">
+      <div class="text-3xl font-bold text-blue-600 mb-2">
+       8+
+      </div>
+      <div class="text-gray-600">
+       Role-Specific Portals
+      </div>
+     </div>
+     <div class="bg-white rounded-lg shadow-sm p-6 text-center">
+      <div class="text-3xl font-bold text-green-600 mb-2">
+       100+
+      </div>
+      <div class="text-gray-600">
+       Training Modules
+      </div>
+     </div>
+     <div class="bg-white rounded-lg shadow-sm p-6 text-center">
+      <div class="text-3xl font-bold text-purple-600 mb-2">
+       24/7
+      </div>
+      <div class="text-gray-600">
+       Access Available
+      </div>
+     </div>
+     <div class="bg-white rounded-lg shadow-sm p-6 text-center">
+      <div class="text-3xl font-bold text-red-600 mb-2">
+       1000+
+      </div>
+      <div class="text-gray-600">
+       Active Users
+      </div>
+     </div>
+    </div>
+    <!-- Portal Access Section - Now more prominent -->
+    <h2 class="text-3xl font-bold text-gray-900 mb-8 text-center" id="portals">
+     Training Portals
+    </h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
+     <!-- Admin Portal -->
+     <a class="transform hover:scale-105 transition duration-300" href="admin/index.html">
+      <div class="bg-white rounded-xl shadow-lg hover:shadow-xl p-6 border-t-4 border-blue-600">
+       <div class="flex items-center justify-between mb-4">
+        <div class="w-14 h-14 bg-blue-100 rounded-full flex items-center justify-center">
+         <i class="fas fa-user-shield text-2xl text-blue-600">
+         </i>
+        </div>
+        <span class="bg-blue-100 text-blue-600 px-3 py-1 rounded-full text-sm font-medium">
+         Admin
+        </span>
+       </div>
+       <h2 class="text-xl font-bold text-gray-900 mb-2">
+        Admin Portal
+       </h2>
+       <p class="text-gray-600 mb-4">
+        System administration and hospital management
+       </p>
+       <ul class="space-y-2 mb-4">
+        <li class="flex items-center text-sm text-gray-600">
+         <i class="fas fa-check-circle text-blue-600 mr-2">
+         </i>
+         Hospital Configuration
+        </li>
+        <li class="flex items-center text-sm text-gray-600">
+         <i class="fas fa-check-circle text-blue-600 mr-2">
+         </i>
+         Staff Management
+        </li>
+        <li class="flex items-center text-sm text-gray-600">
+         <i class="fas fa-check-circle text-blue-600 mr-2">
+         </i>
+         System Settings
+        </li>
+       </ul>
+       <div class="flex items-center text-blue-600">
+        <span class="text-sm font-medium">
+         Access Portal
+        </span>
+        <i class="fas fa-arrow-right ml-2">
+        </i>
+       </div>
+      </div>
+     </a>
+     <!-- Doctor Portal -->
+     <a class="transform hover:scale-105 transition duration-300" href="doctor/index.html">
+      <div class="bg-white rounded-xl shadow-lg hover:shadow-xl p-6 border-t-4 border-green-600">
+       <div class="flex items-center justify-between mb-4">
+        <div class="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center">
+         <i class="fas fa-user-md text-2xl text-green-600">
+         </i>
+        </div>
+        <span class="bg-green-100 text-green-600 px-3 py-1 rounded-full text-sm font-medium">
+         Doctor
+        </span>
+       </div>
+       <h2 class="text-xl font-bold text-gray-900 mb-2">
+        Doctor Portal
+       </h2>
+       <p class="text-gray-600 mb-4">
+        Patient management and medical records
+       </p>
+       <ul class="space-y-2 mb-4">
+        <li class="flex items-center text-sm text-gray-600">
+         <i class="fas fa-check-circle text-green-600 mr-2">
+         </i>
+         Patient Records
+        </li>
+        <li class="flex items-center text-sm text-gray-600">
+         <i class="fas fa-check-circle text-green-600 mr-2">
+         </i>
+         Prescriptions
+        </li>
+        <li class="flex items-center text-sm text-gray-600">
+         <i class="fas fa-check-circle text-green-600 mr-2">
+         </i>
+         Appointments
+        </li>
+       </ul>
+       <div class="flex items-center text-green-600">
+        <span class="text-sm font-medium">
+         Access Portal
+        </span>
+        <i class="fas fa-arrow-right ml-2">
+        </i>
+       </div>
+      </div>
+     </a>
+     <!-- Patient Portal -->
+     <a class="transform hover:scale-105 transition duration-300" href="patient/index.html">
+      <div class="bg-white rounded-xl shadow-lg hover:shadow-xl p-6 border-t-4 border-purple-600">
+       <div class="flex items-center justify-between mb-4">
+        <div class="w-14 h-14 bg-purple-100 rounded-full flex items-center justify-center">
+         <i class="fas fa-hospital-user text-2xl text-purple-600">
+         </i>
+        </div>
+        <span class="bg-purple-100 text-purple-600 px-3 py-1 rounded-full text-sm font-medium">
+         Patient
+        </span>
+       </div>
+       <h2 class="text-xl font-bold text-gray-900 mb-2">
+        Patient Portal
+       </h2>
+       <p class="text-gray-600 mb-4">
+        Appointments and medical history
+       </p>
+       <ul class="space-y-2 mb-4">
+        <li class="flex items-center text-sm text-gray-600">
+         <i class="fas fa-check-circle text-purple-600 mr-2">
+         </i>
+         Book Appointments
+        </li>
+        <li class="flex items-center text-sm text-gray-600">
+         <i class="fas fa-check-circle text-purple-600 mr-2">
+         </i>
+         View Reports
+        </li>
+        <li class="flex items-center text-sm text-gray-600">
+         <i class="fas fa-check-circle text-purple-600 mr-2">
+         </i>
+         Medical History
+        </li>
+       </ul>
+       <div class="flex items-center text-purple-600">
+        <span class="text-sm font-medium">
+         Access Portal
+        </span>
+        <i class="fas fa-arrow-right ml-2">
+        </i>
+       </div>
+      </div>
+     </a>
+     <!-- Nurse Portal -->
+     <a class="transform hover:scale-105 transition duration-300" href="nurse/index.html">
+      <div class="bg-white rounded-xl shadow-lg hover:shadow-xl p-6 border-t-4 border-red-600">
+       <div class="flex items-center justify-between mb-4">
+        <div class="w-14 h-14 bg-red-100 rounded-full flex items-center justify-center">
+         <i class="fas fa-user-nurse text-2xl text-red-600">
+         </i>
+        </div>
+        <span class="bg-red-100 text-red-600 px-3 py-1 rounded-full text-sm font-medium">
+         Nurse
+        </span>
+       </div>
+       <h2 class="text-xl font-bold text-gray-900 mb-2">
+        Nurse Portal
+       </h2>
+       <p class="text-gray-600 mb-4">
+        Patient care and ward management
+       </p>
+       <ul class="space-y-2 mb-4">
+        <li class="flex items-center text-sm text-gray-600">
+         <i class="fas fa-check-circle text-red-600 mr-2">
+         </i>
+         Patient Care
+        </li>
+        <li class="flex items-center text-sm text-gray-600">
+         <i class="fas fa-check-circle text-red-600 mr-2">
+         </i>
+         Ward Management
+        </li>
+        <li class="flex items-center text-sm text-gray-600">
+         <i class="fas fa-check-circle text-red-600 mr-2">
+         </i>
+         Medicine Schedule
+        </li>
+       </ul>
+       <div class="flex items-center text-red-600">
+        <span class="text-sm font-medium">
+         Access Portal
+        </span>
+        <i class="fas fa-arrow-right ml-2">
+        </i>
+       </div>
+      </div>
+     </a>
+     <!-- Receptionist Portal -->
+     <a class="transform hover:scale-105 transition duration-300" href="receptionist/index.html">
+      <div class="bg-white rounded-xl shadow-lg hover:shadow-xl p-6 border-t-4 border-yellow-600">
+       <div class="flex items-center justify-between mb-4">
+        <div class="w-14 h-14 bg-yellow-100 rounded-full flex items-center justify-center">
+         <i class="fas fa-desktop text-2xl text-yellow-600">
+         </i>
+        </div>
+        <span class="bg-yellow-100 text-yellow-600 px-3 py-1 rounded-full text-sm font-medium">
+         Receptionist
+        </span>
+       </div>
+       <h2 class="text-xl font-bold text-gray-900 mb-2">
+        Receptionist Portal
+       </h2>
+       <p class="text-gray-600 mb-4">
+        Front desk and appointment management
+       </p>
+       <ul class="space-y-2 mb-4">
+        <li class="flex items-center text-sm text-gray-600">
+         <i class="fas fa-check-circle text-yellow-600 mr-2">
+         </i>
+         Appointment Scheduling
+        </li>
+        <li class="flex items-center text-sm text-gray-600">
+         <i class="fas fa-check-circle text-yellow-600 mr-2">
+         </i>
+         Patient Registration
+        </li>
+        <li class="flex items-center text-sm text-gray-600">
+         <i class="fas fa-check-circle text-yellow-600 mr-2">
+         </i>
+         Visitor Management
+        </li>
+       </ul>
+       <div class="flex items-center text-yellow-600">
+        <span class="text-sm font-medium">
+         Access Portal
+        </span>
+        <i class="fas fa-arrow-right ml-2">
+        </i>
+       </div>
+      </div>
+     </a>
+     <!-- Laboratorist Portal -->
+     <a class="transform hover:scale-105 transition duration-300" href="laboratorist/index.html">
+      <div class="bg-white rounded-xl shadow-lg hover:shadow-xl p-6 border-t-4 border-indigo-600">
+       <div class="flex items-center justify-between mb-4">
+        <div class="w-14 h-14 bg-indigo-100 rounded-full flex items-center justify-center">
+         <i class="fas fa-flask text-2xl text-indigo-600">
+         </i>
+        </div>
+        <span class="bg-indigo-100 text-indigo-600 px-3 py-1 rounded-full text-sm font-medium">
+         Laboratorist
+        </span>
+       </div>
+       <h2 class="text-xl font-bold text-gray-900 mb-2">
+        Laboratorist Portal
+       </h2>
+       <p class="text-gray-600 mb-4">
+        Lab tests and reports management
+       </p>
+       <ul class="space-y-2 mb-4">
+        <li class="flex items-center text-sm text-gray-600">
+         <i class="fas fa-check-circle text-indigo-600 mr-2">
+         </i>
+         Test Management
+        </li>
+        <li class="flex items-center text-sm text-gray-600">
+         <i class="fas fa-check-circle text-indigo-600 mr-2">
+         </i>
+         Report Generation
+        </li>
+        <li class="flex items-center text-sm text-gray-600">
+         <i class="fas fa-check-circle text-indigo-600 mr-2">
+         </i>
+         Sample Tracking
+        </li>
+       </ul>
+       <div class="flex items-center text-indigo-600">
+        <span class="text-sm font-medium">
+         Access Portal
+        </span>
+        <i class="fas fa-arrow-right ml-2">
+        </i>
+       </div>
+      </div>
+     </a>
+     <!-- Accountant Portal -->
+     <a class="transform hover:scale-105 transition duration-300" href="accountant/index.html">
+      <div class="bg-white rounded-xl shadow-lg hover:shadow-xl p-6 border-t-4 border-gray-600">
+       <div class="flex items-center justify-between mb-4">
+        <div class="w-14 h-14 bg-gray-100 rounded-full flex items-center justify-center">
+         <i class="fas fa-calculator text-2xl text-gray-600">
+         </i>
+        </div>
+        <span class="bg-gray-100 text-gray-600 px-3 py-1 rounded-full text-sm font-medium">
+         Accountant
+        </span>
+       </div>
+       <h2 class="text-xl font-bold text-gray-900 mb-2">
+        Accountant Portal
+       </h2>
+       <p class="text-gray-600 mb-4">
+        Financial management and billing
+       </p>
+       <ul class="space-y-2 mb-4">
+        <li class="flex items-center text-sm text-gray-600">
+         <i class="fas fa-check-circle text-gray-600 mr-2">
+         </i>
+         Payment Processing
+        </li>
+        <li class="flex items-center text-sm text-gray-600">
+         <i class="fas fa-check-circle text-gray-600 mr-2">
+         </i>
+         Financial Reports
+        </li>
+        <li class="flex items-center text-sm text-gray-600">
+         <i class="fas fa-check-circle text-gray-600 mr-2">
+         </i>
+         Expense Tracking
+        </li>
+       </ul>
+       <div class="flex items-center text-gray-600">
+        <span class="text-sm font-medium">
+         Access Portal
+        </span>
+        <i class="fas fa-arrow-right ml-2">
+        </i>
+       </div>
+      </div>
+     </a>
+     <!-- Pharmacist Portal -->
+     <a class="transform hover:scale-105 transition duration-300" href="pharmacist/index.html">
+      <div class="bg-white rounded-xl shadow-lg hover:shadow-xl p-6 border-t-4 border-pink-600">
+       <div class="flex items-center justify-between mb-4">
+        <div class="w-14 h-14 bg-pink-100 rounded-full flex items-center justify-center">
+         <i class="fas fa-pills text-2xl text-pink-600">
+         </i>
+        </div>
+        <span class="bg-pink-100 text-pink-600 px-3 py-1 rounded-full text-sm font-medium">
+         Pharmacist
+        </span>
+       </div>
+       <h2 class="text-xl font-bold text-gray-900 mb-2">
+        Pharmacist Portal
+       </h2>
+       <p class="text-gray-600 mb-4">
+        Medicine and inventory management
+       </p>
+       <ul class="space-y-2 mb-4">
+        <li class="flex items-center text-sm text-gray-600">
+         <i class="fas fa-check-circle text-pink-600 mr-2">
+         </i>
+         Medicine Inventory
+        </li>
+        <li class="flex items-center text-sm text-gray-600">
+         <i class="fas fa-check-circle text-pink-600 mr-2">
+         </i>
+         Prescription Review
+        </li>
+        <li class="flex items-center text-sm text-gray-600">
+         <i class="fas fa-check-circle text-pink-600 mr-2">
+         </i>
+         Stock Management
+        </li>
+       </ul>
+       <div class="flex items-center text-pink-600">
+        <span class="text-sm font-medium">
+         Access Portal
+        </span>
+        <i class="fas fa-arrow-right ml-2">
+        </i>
+       </div>
+      </div>
+     </a>
+    </div>
+    <!-- Help Section -->
+    <div class="mt-12 bg-gray-50 rounded-lg p-8" id="help">
+     <h2 class="text-2xl font-bold text-gray-900 mb-6">
+      Need Assistance?
+     </h2>
+     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div>
+       <h3 class="font-semibold text-gray-900 mb-4">
+        Support Channels
+       </h3>
+       <ul class="space-y-3">
+        <li class="flex items-center text-gray-600">
+         <i class="fas fa-envelope text-blue-600 w-5 mr-2">
+         </i>
+         rizvi.mahmud.plabon@gmail.com
+        </li>
+        <li class="flex items-center text-gray-600">
+         <i class="fas fa-phone text-blue-600 w-5 mr-2">
+         </i>
+         +880 1777 024443
+        </li>
+        <li class="flex items-center text-gray-600">
+         <i class="fas fa-comments text-blue-600 w-5 mr-2">
+         </i>
+         Live Chat (24/7)
+        </li>
+       </ul>
+      </div>
+      <div>
+       <h3 class="font-semibold text-gray-900 mb-4">
+        Quick Resources
+       </h3>
+       <ul class="space-y-3">
+        <li class="flex items-center text-gray-600">
+         <i class="fas fa-book text-blue-600 w-5 mr-2">
+         </i>
+         Training Documentation
+        </li>
+        <li class="flex items-center text-gray-600">
+         <i class="fas fa-video text-blue-600 w-5 mr-2">
+         </i>
+         Video Tutorials
+        </li>
+        <li class="flex items-center text-gray-600">
+         <i class="fas fa-question-circle text-blue-600 w-5 mr-2">
+         </i>
+         FAQs
+        </li>
+       </ul>
+      </div>
+     </div>
+    </div>
+   </main>
+   <!-- Footer -->
+   <footer class="bg-white border-t mt-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+     <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+      <div>
+       <h3 class="font-semibold text-gray-900 mb-3">
+        About HMS
+       </h3>
+       <p class="text-gray-600 text-sm">
+        Comprehensive hospital management system training for healthcare professionals.
+       </p>
+      </div>
+      <div>
+       <h3 class="font-semibold text-gray-900 mb-3">
+        Quick Links
+       </h3>
+       <ul class="space-y-2 text-sm">
+        <li>
+         <a class="text-gray-600 hover:text-blue-600" href="#">
+          Home
+         </a>
+        </li>
+        <li>
+         <a class="text-gray-600 hover:text-blue-600" href="#portals">
+          Training Portals
+         </a>
+        </li>
+        <li>
+         <a class="text-gray-600 hover:text-blue-600" href="#help">
+          Support
+         </a>
+        </li>
+       </ul>
+      </div>
+      <div>
+       <h3 class="font-semibold text-gray-900 mb-3">
+        Legal
+       </h3>
+       <ul class="space-y-2 text-sm">
+        <li>
+         <a class="text-gray-600 hover:text-blue-600" href="#">
+          Privacy Policy
+         </a>
+        </li>
+        <li>
+         <a class="text-gray-600 hover:text-blue-600" href="#">
+          Terms of Service
+         </a>
+        </li>
+        <li>
+         <a class="text-gray-600 hover:text-blue-600" href="#">
+          Cookie Policy
+         </a>
+        </li>
+       </ul>
+      </div>
+      <div>
+       <h3 class="font-semibold text-gray-900 mb-3">
+        Connect
+       </h3>
+       <div class="flex space-x-4">
+        <a class="text-gray-400 hover:text-blue-600" href="https://facebook.com/casft" target="_blank">
+         <i class="fab fa-facebook-f">
+         </i>
+        </a>
+        <a class="text-gray-400 hover:text-blue-600" href="#">
+         <i class="fab fa-twitter">
+         </i>
+        </a>
+        <a class="text-gray-400 hover:text-blue-600" href="#">
+         <i class="fab fa-linkedin-in">
+         </i>
+        </a>
+        <a class="text-gray-400 hover:text-blue-600" href="#">
+         <i class="fab fa-youtube">
+         </i>
+        </a>
+       </div>
+      </div>
+     </div>
+     <div class="border-t mt-8 pt-6">
+      <p class="text-center text-gray-500">
+       © 2025 Hospital Management System. All rights reserved.
+      </p>
+     </div>
+    </div>
+   </footer>
+  </div>
+ </body>
+</html>
