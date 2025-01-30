@@ -478,7 +478,7 @@ def main():
     # Footer con información y enlaces
     st.markdown("---")
     st.markdown(
-        """
+        f"""
         <div style='text-align: center'>
             <p style='color: #666; font-size: 0.9rem;'>
                 Desarrollado con ❤️ por 
